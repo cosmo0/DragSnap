@@ -1,0 +1,16 @@
+﻿<Controls:MetroWindow x:Class="DragSnap.Windows.BaseDialogWindow"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      Title="BaseDialogWindow"
+                      Height="300"
+                      Width="800"
+                      ShowInTaskbar="False"
+                      ShowIconOnTitleBar="False"
+                      ShowMaxRestoreButton="False"
+                      ShowMinButton="False"
+                      ResizeMode="NoResize"
+                      EnableDWMDropShadow="True"
+                      WindowStartupLocation="CenterOwner">
+    <Grid />
+</Controls:MetroWindow>

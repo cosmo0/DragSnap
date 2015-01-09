@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DragSnap.Properties
+namespace CaliburnTemplate.Properties
 {
 
 
