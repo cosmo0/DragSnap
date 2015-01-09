@@ -22,6 +22,17 @@
         {
             this.events = events;
             this.events.Subscribe(this);
+
+            this.Items = new BindableCollection<ItemViewModel>();
+        }
+
+        public BindableCollection<ItemViewModel> Items { get; set; }
+
+        public void AddItem()
+        {
+            this.Items.Add(new ItemViewModel());
+
+            this.NotifyOfPropertyChange(() => this.Items);
         }
     }
 }
