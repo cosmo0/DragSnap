@@ -3,6 +3,7 @@ namespace DragSnap.ViewModels
     using System;
     using System.Linq;
     using System.Windows.Media;
+    using Caliburn.Micro;
     using PropertyChanged;
 
     /// <summary>
@@ -11,10 +12,15 @@ namespace DragSnap.ViewModels
     [ImplementPropertyChanged]
     public class ItemViewModel
     {
+        private readonly IEventAggregator events;
+
         Random r = new Random();
 
-        public ItemViewModel()
+        public ItemViewModel(IEventAggregator events)
         {
+            this.events = events;
+            this.events.Subscribe(this);
+
             this.BackgroundColor = this.RandomColor();
 
             this.Width = 100;

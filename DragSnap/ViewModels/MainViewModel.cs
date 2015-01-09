@@ -26,11 +26,17 @@
             this.Items = new BindableCollection<ItemViewModel>();
         }
 
+        /// <summary>
+        /// Gets or sets a collection of items displayed in the canvas
+        /// </summary>
         public BindableCollection<ItemViewModel> Items { get; set; }
 
+        /// <summary>
+        /// Adds an item to the canvas
+        /// </summary>
         public void AddItem()
         {
-            this.Items.Add(new ItemViewModel());
+            this.Items.Add(new ItemViewModel(this.events));
 
             this.NotifyOfPropertyChange(() => this.Items);
         }
