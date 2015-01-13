@@ -17,7 +17,8 @@
 
         <Button
             Grid.Row="0"
-            Content="Add an item to the canvas" cal:Message.Attach="[Event Click] = [Action AddItem()]" />
+            Content="Add an item to the canvas"
+            cal:Message.Attach="[Event Click] = [Action AddItem()]" />
 
         <ItemsControl
             Grid.Row="1"

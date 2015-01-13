@@ -15,7 +15,12 @@
         /// <summary>
         /// Registers a Drag dependency property
         /// </summary>
-        public static readonly DependencyProperty IsDragProperty = DependencyProperty.RegisterAttached("Drag", typeof(bool), typeof(DragBehavior), new PropertyMetadata(false, OnDragChanged));
+        public static readonly DependencyProperty IsDragProperty =
+            DependencyProperty.RegisterAttached(
+                "Drag",
+                typeof(bool),
+                typeof(DragBehavior),
+                new PropertyMetadata(false, OnDragChanged));
 
         /// <summary>
         /// The applied transformation
