@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:cal="http://www.caliburnproject.org"
+             xmlns:behaviors="clr-namespace:DragSnap.Behaviors"
              mc:Ignorable="d"
              d:DesignHeight="300"
              d:DesignWidth="300">
@@ -51,7 +52,9 @@
                 <DataTemplate>
                     <Border
                         Background="{Binding Path=BackgroundColor}"
-                        CornerRadius="3">
+                        CornerRadius="3"
+                        Padding="5"
+                        behaviors:DragBehavior.Drag="True">
                         <Rectangle>
                             <Rectangle.Fill>
                                 <VisualBrush Visual="{StaticResource appbar_cursor_move}" />
