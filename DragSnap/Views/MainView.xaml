@@ -55,10 +55,12 @@
                         Background="{Binding Path=BackgroundColor}"
                         CornerRadius="3"
                         Padding="5"
-                        behaviors:DragBehavior.Drag="True">
+                        behaviors:DragBehavior.Drag="True"
+                        behaviors:DragBehavior.DropHandler="{Binding}">
                         <Rectangle>
                             <Rectangle.Fill>
-                                <VisualBrush Visual="{StaticResource appbar_cursor_move}" />
+                                <VisualBrush
+                                    Visual="{StaticResource appbar_cursor_move}" />
                             </Rectangle.Fill>
                         </Rectangle>
                     </Border>

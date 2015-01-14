@@ -5,6 +5,7 @@
     using System.Windows;
     using System.Windows.Input;
     using System.Windows.Media;
+    using DragSnap.Models;
 
     /// <summary>
     /// Draggable item behavior
@@ -12,6 +13,16 @@
     /// </summary>
     public class DragBehavior
     {
+        /// <summary>
+        /// Registers a DropHandler dependency property
+        /// </summary>
+        public static readonly DependencyProperty DropHandlerProperty =
+            DependencyProperty.RegisterAttached(
+                "DropHandler",
+                typeof(IDropHandler),
+                typeof(DragBehavior),
+                new PropertyMetadata(OnDropHandlerChanged));
+
         /// <summary>
         /// Registers a Drag dependency property
         /// </summary>
@@ -23,14 +34,14 @@
                 new PropertyMetadata(false, OnDragChanged));
 
         /// <summary>
-        /// The applied transformation
-        /// </summary>
-        public readonly TranslateTransform Transform = new TranslateTransform();
-
-        /// <summary>
         /// The instance of the behavior
         /// </summary>
         private static DragBehavior _instance = new DragBehavior();
+
+        /// <summary>
+        /// The applied transformation
+        /// </summary>
+        private readonly TranslateTransform Transform = new TranslateTransform();
 
         /// <summary>
         /// The element starting position
@@ -41,6 +52,11 @@
         /// The mouse starting position
         /// </summary>
         private Point _mouseStartPosition2 = new Point(0, 0);
+
+        /// <summary>
+        /// The drop handler
+        /// </summary>
+        private IDropHandler dropHandler;
 
         /// <summary>
         /// Gets or sets the behavior instance
@@ -68,6 +84,16 @@
         }
 
         /// <summary>
+        /// Gets the DropHandler property
+        /// </summary>
+        /// <param name="target">The drop target</param>
+        /// <returns>The drop target</returns>
+        public static IDropHandler GetDropHandler(UIElement target)
+        {
+            return (IDropHandler)target.GetValue(DropHandlerProperty);
+        }
+
+        /// <summary>
         /// Sets the IsDrag property
         /// </summary>
         /// <param name="obj">The dependency object</param>
@@ -75,6 +101,16 @@
         public static void SetDrag(DependencyObject obj, bool value)
         {
             obj.SetValue(IsDragProperty, value);
+        }
+
+        /// <summary>
+        /// Sets the drop handler property
+        /// </summary>
+        /// <param name="target">The drop target</param>
+        /// <param name="value">The value of the property</param>
+        public static void SetDropHandler(UIElement target, IDropHandler value)
+        {
+            target.SetValue(DropHandlerProperty, value);
         }
 
         /// <summary>
@@ -88,7 +124,6 @@
             var element = (UIElement)sender;
             var isDrag = (bool)(e.NewValue);
 
-            Instance = new DragBehavior();
             ((UIElement)sender).RenderTransform = Instance.Transform;
 
             if (isDrag)
@@ -103,6 +138,18 @@
                 element.MouseLeftButtonUp -= Instance.ElementOnMouseLeftButtonUp;
                 element.MouseMove -= Instance.ElementOnMouseMove;
             }
+        }
+
+        /// <summary>
+        /// Sets the OnDrop handler on the instance
+        /// </summary>
+        /// <param name="sender">The sending object</param>
+        /// <param name="e">The event values</param>
+        private static void OnDropHandlerChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            var handler = (IDropHandler)(e.NewValue);
+
+            Instance.dropHandler = handler;
         }
 
         /// <summary>
@@ -127,6 +174,11 @@
             ((UIElement)sender).ReleaseMouseCapture();
             this._elementStartPosition2.X = this.Transform.X;
             this._elementStartPosition2.Y = this.Transform.Y;
+
+            if (this.dropHandler != null)
+            {
+                this.dropHandler.Dropped();
+            }
         }
 
         /// <summary>

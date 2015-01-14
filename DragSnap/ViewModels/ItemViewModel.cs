@@ -4,13 +4,14 @@ namespace DragSnap.ViewModels
     using System.Linq;
     using System.Windows.Media;
     using Caliburn.Micro;
+    using DragSnap.Models;
     using PropertyChanged;
 
     /// <summary>
     /// Represents an item to drag and drop
     /// </summary>
     [ImplementPropertyChanged]
-    public class ItemViewModel
+    public class ItemViewModel : IDropHandler
     {
         /// <summary>
         /// The events aggregator
@@ -63,6 +64,11 @@ namespace DragSnap.ViewModels
         /// Gets or sets the item Y position
         /// </summary>
         public double Y { get; set; }
+
+        public void Dropped()
+        {
+            // TODO: send a message to the main viewmodel to check if the item's coordinates are similar to another item
+        }
 
         /// <summary>
         /// http://stackoverflow.com/a/11282427/6776
