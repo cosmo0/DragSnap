@@ -92,6 +92,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Behaviors\DragBehavior.cs" />
+    <Compile Include="Events\ItemReleasedEvent.cs" />
     <Compile Include="Models\IDropHandler.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />

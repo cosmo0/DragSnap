@@ -4,6 +4,7 @@ namespace DragSnap.ViewModels
     using System.Linq;
     using System.Windows.Media;
     using Caliburn.Micro;
+    using DragSnap.Events;
     using DragSnap.Models;
     using PropertyChanged;
 
@@ -65,9 +66,12 @@ namespace DragSnap.ViewModels
         /// </summary>
         public double Y { get; set; }
 
+        /// <summary>
+        /// Publishes the ItemReleasedEvent
+        /// </summary>
         public void Dropped()
         {
-            // TODO: send a message to the main viewmodel to check if the item's coordinates are similar to another item
+            this.events.PublishOnUIThread(new ItemReleasedEvent(this.X, this.Y, this.Width, this.Height));
         }
 
         /// <summary>
