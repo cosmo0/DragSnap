@@ -12,10 +12,20 @@ namespace DragSnap.ViewModels
     [ImplementPropertyChanged]
     public class ItemViewModel
     {
+        /// <summary>
+        /// The events aggregator
+        /// </summary>
         private readonly IEventAggregator events;
 
-        Random r = new Random();
+        /// <summary>
+        /// The random generator
+        /// </summary>
+        private readonly Random r = new Random();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ItemViewModel"/> class
+        /// </summary>
+        /// <param name="events">The event aggregator to use</param>
         public ItemViewModel(IEventAggregator events)
         {
             this.events = events;
@@ -27,20 +37,31 @@ namespace DragSnap.ViewModels
             this.Height = 100;
             this.X = 10;
             this.Y = 10;
-
-            this.Content = "test";
         }
 
+        /// <summary>
+        /// Gets or sets the item background color
+        /// </summary>
         public Brush BackgroundColor { get; set; }
 
-        public string Content { get; set; }
-
+        /// <summary>
+        /// Gets or sets the item height
+        /// </summary>
         public int Height { get; set; }
 
+        /// <summary>
+        /// Gets or sets the item width
+        /// </summary>
         public int Width { get; set; }
 
+        /// <summary>
+        /// Gets or sets the item X position
+        /// </summary>
         public double X { get; set; }
 
+        /// <summary>
+        /// Gets or sets the item Y position
+        /// </summary>
         public double Y { get; set; }
 
         /// <summary>
