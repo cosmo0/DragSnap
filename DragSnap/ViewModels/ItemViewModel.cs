@@ -12,7 +12,7 @@ namespace DragSnap.ViewModels
     /// Represents an item to drag and drop
     /// </summary>
     [ImplementPropertyChanged]
-    public class ItemViewModel : IDragDropHandler
+    public class ItemViewModel : PropertyChangedBase, IDragDropHandler
     {
         /// <summary>
         /// The events aggregator
