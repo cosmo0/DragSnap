@@ -9,7 +9,7 @@
     /// Main view model for the application
     /// </summary>
     [ImplementPropertyChanged]
-    public class MainViewModel : PropertyChangedBase, IHandle<ItemDroppedEvent>
+    public class MainViewModel : PropertyChangedBase, IHandle<ItemMovedEvent>
     {
         /// <summary>
         /// The threshold at which the items positions are considered equal
@@ -52,7 +52,7 @@
         /// Handles the item released event
         /// </summary>
         /// <param name="message">The message</param>
-        public void Handle(ItemDroppedEvent message)
+        public void Handle(ItemMovedEvent message)
         {
             // checks if the item has coordinates within another item's coordinates
             foreach (ItemViewModel item in this.Items)

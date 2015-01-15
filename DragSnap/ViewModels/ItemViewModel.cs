@@ -100,7 +100,6 @@ namespace DragSnap.ViewModels
         /// </summary>
         public void Dropped()
         {
-            this.events.PublishOnUIThread(new ItemDroppedEvent(this.X, this.Y, this.Width, this.Height, this.ID));
         }
 
         /// <summary>
@@ -110,6 +109,9 @@ namespace DragSnap.ViewModels
         {
             this.X = x;
             this.Y = y;
+
+            // Notify the container that the item is moved, so that it can calculate snapping
+            this.events.PublishOnUIThread(new ItemMovedEvent(this.X, this.Y, this.Width, this.Height, this.ID));
         }
 
         /// <summary>

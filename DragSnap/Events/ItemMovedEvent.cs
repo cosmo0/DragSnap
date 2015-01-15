@@ -5,16 +5,16 @@
     /// <summary>
     /// Represents an item released (dropped) event
     /// </summary>
-    public class ItemDroppedEvent
+    public class ItemMovedEvent
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ItemDroppedEvent"/> class
+        /// Initializes a new instance of the <see cref="ItemMovedEvent"/> class
         /// </summary>
         /// <param name="x">The item's X</param>
         /// <param name="y">The item's Y</param>
         /// <param name="width">The item's width</param>
         /// <param name="height">The item's height</param>
-        public ItemDroppedEvent(double x, double y, double width, double height, Guid id)
+        public ItemMovedEvent(double x, double y, double width, double height, Guid id)
         {
             this.X = x;
             this.Y = y;
