@@ -25,7 +25,12 @@
         /// <summary>
         /// The instance of the behavior
         /// </summary>
-        private static DragOnCanvasBehavior instance = new DragOnCanvasBehavior();
+        private static DragOnCanvasBehavior Instance = new DragOnCanvasBehavior();
+
+        /// <summary>
+        /// The drop handler
+        /// </summary>
+        private IDragDropHandler DropHandler;
 
         /// <summary>
         /// The element position (for movement calculations)
@@ -36,26 +41,6 @@
         /// The mouse starting position
         /// </summary>
         private Point mouseStartPosition = new Point(0, 0);
-
-        /// <summary>
-        /// Gets or sets the behavior instance
-        /// </summary>
-        public static DragOnCanvasBehavior Instance
-        {
-            get
-            {
-                return instance;
-            }
-            set
-            {
-                instance = value;
-            }
-        }
-
-        /// <summary>
-        /// The drop handler
-        /// </summary>
-        private IDragDropHandler DropHandler { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether there is a drop handler
