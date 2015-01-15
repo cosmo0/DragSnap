@@ -55,8 +55,7 @@
                         Background="{Binding Path=BackgroundColor}"
                         CornerRadius="3"
                         Padding="5"
-                        behaviors:DragBehavior.Drag="True"
-                        behaviors:DragBehavior.DropHandler="{Binding}">
+                        behaviors:DragOnCanvasBehavior.DropHandler="{Binding}">
                         <Rectangle>
                             <Rectangle.Fill>
                                 <VisualBrush

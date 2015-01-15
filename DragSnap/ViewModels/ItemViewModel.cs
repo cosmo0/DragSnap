@@ -12,7 +12,7 @@ namespace DragSnap.ViewModels
     /// Represents an item to drag and drop
     /// </summary>
     [ImplementPropertyChanged]
-    public class ItemViewModel : IDropHandler
+    public class ItemViewModel : IDragDropHandler
     {
         /// <summary>
         /// The events aggregator
@@ -37,8 +37,10 @@ namespace DragSnap.ViewModels
 
             this.Width = 100;
             this.Height = 100;
-            this.X = 10;
-            this.Y = 10;
+            this.X = 0;
+            this.Y = 0;
+
+            this.ID = Guid.NewGuid();
         }
 
         /// <summary>
@@ -47,9 +49,31 @@ namespace DragSnap.ViewModels
         public Brush BackgroundColor { get; set; }
 
         /// <summary>
+        /// Gets the bottom side coordinates
+        /// </summary>
+        public double Bottom
+        {
+            get
+            {
+                return this.Y + (double)this.Height;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the item height
         /// </summary>
         public int Height { get; set; }
+
+        /// <summary>
+        /// Gets the right side coordinates
+        /// </summary>
+        public double Right
+        {
+            get
+            {
+                return this.X + (double)this.Width;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the item width
@@ -67,11 +91,25 @@ namespace DragSnap.ViewModels
         public double Y { get; set; }
 
         /// <summary>
-        /// Publishes the ItemReleasedEvent
+        /// Gets or sets the item ID (to differenciate between them in the main viewmodel)
+        /// </summary>
+        internal Guid ID { get; set; }
+
+        /// <summary>
+        /// Runs when the item is dropped
         /// </summary>
         public void Dropped()
         {
-            this.events.PublishOnUIThread(new ItemReleasedEvent(this.X, this.Y, this.Width, this.Height));
+            this.events.PublishOnUIThread(new ItemDroppedEvent(this.X, this.Y, this.Width, this.Height, this.ID));
+        }
+
+        /// <summary>
+        /// Runs when the item is moved
+        /// </summary>
+        public void Moved(double x, double y)
+        {
+            this.X = x;
+            this.Y = y;
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿namespace DragSnap.ViewModels
 {
+    using System;
     using Caliburn.Micro;
     using DragSnap.Events;
     using PropertyChanged;
@@ -8,8 +9,13 @@
     /// Main view model for the application
     /// </summary>
     [ImplementPropertyChanged]
-    public class MainViewModel : PropertyChangedBase, IHandle<ItemReleasedEvent>
+    public class MainViewModel : PropertyChangedBase, IHandle<ItemDroppedEvent>
     {
+        /// <summary>
+        /// The threshold at which the items positions are considered equal
+        /// </summary>
+        private const double Threshold = 10;
+
         /// <summary>
         /// Stores the events aggregator
         /// </summary>
@@ -32,12 +38,6 @@
         /// </summary>
         public BindableCollection<ItemViewModel> Items { get; set; }
 
-        public void Handle(ItemReleasedEvent message)
-        {
-            // TODO: checks if the item has coordinates within another item's coordinates
-            throw new System.NotImplementedException();
-        }
-
         /// <summary>
         /// Adds an item to the canvas
         /// </summary>
@@ -46,6 +46,42 @@
             this.Items.Add(new ItemViewModel(this.events));
 
             this.NotifyOfPropertyChange(() => this.Items);
+        }
+
+        /// <summary>
+        /// Handles the item released event
+        /// </summary>
+        /// <param name="message">The message</param>
+        public void Handle(ItemDroppedEvent message)
+        {
+            // checks if the item has coordinates within another item's coordinates
+            foreach (ItemViewModel item in this.Items)
+            {
+                if (item.ID == message.ID)
+                {
+                    continue;
+                }
+
+                if (ApproximatelyEquals(item.X, message.X) ||
+                    ApproximatelyEquals(item.Y, message.Y) ||
+                    ApproximatelyEquals(item.Bottom, message.Bottom) ||
+                    ApproximatelyEquals(item.Right, message.Right))
+                {
+                    throw new System.NotImplementedException();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Calculates whether a number is approximately equal to another using the threshold
+        /// </summary>
+        /// <param name="A">The first </param>
+        /// <param name="B"></param>
+        /// <returns></returns>
+        private static bool ApproximatelyEquals(double A, double B)
+        {
+            double actualDifference = Math.Abs(A - B);
+            return actualDifference <= Threshold;
         }
     }
 }
