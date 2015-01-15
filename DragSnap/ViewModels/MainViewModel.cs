@@ -44,8 +44,6 @@
         public void AddItem()
         {
             this.Items.Add(new ItemViewModel(this.events));
-
-            this.NotifyOfPropertyChange(() => this.Items);
         }
 
         /// <summary>
