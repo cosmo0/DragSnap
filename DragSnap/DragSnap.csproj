@@ -92,8 +92,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Behaviors\DragOnCanvasBehavior.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Events\ItemMovedEvent.cs" />
-    <Compile Include="Models\IDragDropHandler.cs" />
+    <Compile Include="Models\IDraggable.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\MasterViewModel.cs" />
