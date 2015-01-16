@@ -54,14 +54,29 @@
                     <Border
                         Background="{Binding Path=BackgroundColor}"
                         CornerRadius="3"
-                        Padding="5"
-                        behaviors:DragOnCanvasBehavior.DropHandler="{Binding}">
+                        Padding="5">
                         <Rectangle>
                             <Rectangle.Fill>
                                 <VisualBrush
                                     Visual="{StaticResource appbar_cursor_move}" />
                             </Rectangle.Fill>
                         </Rectangle>
+                        
+                        <i:Interaction.Behaviors>
+                            <behaviors:DragOnCanvasBehavior DraggableItem="{Binding}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                        <i:InvokeCommandAction CommandName="MouseLeftButtonDownCommand" />
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                        <i:InvokeCommandAction CommandName="MouseLeftButtonUpCommand" />
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="PreviewMouseMove">
+                                        <i:InvokeCommandAction CommandName="MouseMoveCommand" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </behaviors:DragOnCanvasBehavior>
+                        </i:Interaction.Behaviors>
                     </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
