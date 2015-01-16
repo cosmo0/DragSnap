@@ -6,6 +6,7 @@
 
     /// <summary>
     /// Provides a simple relay command
+    /// Copy from <see href="http://www.codeproject.com/Articles/813345/Basic-MVVM-and-ICommand-usuage-example"/>
     /// </summary>
     public class RelayCommand : ICommand
     {
