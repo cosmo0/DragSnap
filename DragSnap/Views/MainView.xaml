@@ -61,18 +61,18 @@
                                     Visual="{StaticResource appbar_cursor_move}" />
                             </Rectangle.Fill>
                         </Rectangle>
-                        
+
                         <i:Interaction.Behaviors>
                             <behaviors:DragOnCanvasBehavior DraggableItem="{Binding}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
-                                        <i:InvokeCommandAction CommandName="MouseLeftButtonDownCommand" />
+                                        <i:InvokeCommandAction CommandName="StartDrag" />
                                     </i:EventTrigger>
                                     <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
-                                        <i:InvokeCommandAction CommandName="MouseLeftButtonUpCommand" />
+                                        <i:InvokeCommandAction CommandName="StopDrag" />
                                     </i:EventTrigger>
                                     <i:EventTrigger EventName="PreviewMouseMove">
-                                        <i:InvokeCommandAction CommandName="MouseMoveCommand" />
+                                        <i:InvokeCommandAction CommandName="Dragging" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </behaviors:DragOnCanvasBehavior>

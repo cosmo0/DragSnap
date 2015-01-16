@@ -46,19 +46,19 @@
         /// </summary>
         public DragOnCanvasBehavior()
         {
-            this.MouseLeftButtonDownCommand = new RelayCommand((o) =>
+            this.StartDrag = new RelayCommand((o) =>
             {
-                ((UIElement)this.AssociatedObject).MouseLeftButtonDown += this.ElementOnMouseLeftButtonDown;
+                ((UIElement)this.AssociatedObject).MouseLeftButtonDown += this.OnStartDrag;
             });
 
-            this.MouseLeftButtonUpCommand = new RelayCommand((o) =>
+            this.StopDrag = new RelayCommand((o) =>
             {
-                ((UIElement)this.AssociatedObject).MouseLeftButtonUp += this.ElementOnMouseLeftButtonUp;
+                ((UIElement)this.AssociatedObject).MouseLeftButtonUp += this.OnStopDrag;
             });
 
-            this.MouseMoveCommand = new RelayCommand((o) =>
+            this.Dragging = new RelayCommand((o) =>
             {
-                ((UIElement)this.AssociatedObject).MouseMove += this.ElementOnMouseMove;
+                ((UIElement)this.AssociatedObject).MouseMove += this.OnDragging;
             });
         }
 
@@ -78,53 +78,29 @@
         }
 
         /// <summary>
+        /// Gets or sets the "mouse move" command
+        /// </summary>
+        public ICommand Dragging { get; private set; }
+
+        /// <summary>
         /// Gets or sets the "left button down" command
         /// </summary>
-        public ICommand MouseLeftButtonDownCommand { get; private set; }
+        public ICommand StartDrag { get; private set; }
 
         /// <summary>
         /// Gets or sets the "left button up" command
         /// </summary>
-        public ICommand MouseLeftButtonUpCommand { get; private set; }
+        public ICommand StopDrag { get; private set; }
 
         /// <summary>
-        /// Gets or sets the "mouse move" command
+        /// Gets the mouse coordinates relative to the main application window
         /// </summary>
-        public ICommand MouseMoveCommand { get; private set; }
-
-        /// <summary>
-        /// Fires when the left mouse button is pressed
-        /// </summary>
-        /// <param name="sender">The sender</param>
-        /// <param name="e">The event arguments</param>
-        private void ElementOnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        /// <param name="e">The mouse event args</param>
+        /// <returns>The mouse coordinates</returns>
+        private Point GetMousePositionFromMainWindow(MouseEventArgs e)
         {
-            if (this.draggable == null)
-            {
-                return;
-            }
-
-            // save the mouse position on button down
-            // we only want a diff of the mouse position so we don't care much about which element we use as reference
-            this.mouseStartPosition = this.GetMousePositionFromMainWindow(e);
-            ((UIElement)sender).CaptureMouse();
-        }
-
-        /// <summary>
-        /// Fires when the left mouse button is released
-        /// </summary>
-        /// <param name="sender">The sender</param>
-        /// <param name="e">The event arguments</param>
-        private void ElementOnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            UIElement element = (UIElement)sender;
-            element.ReleaseMouseCapture();
-
-            // Send a message to the viewmodel that the mouse has been released
-            if (this.draggable != null)
-            {
-                this.DraggableItem.Dropped();
-            }
+            Window mainWindow = Application.Current.MainWindow;
+            return e.GetPosition(mainWindow);
         }
 
         /// <summary>
@@ -132,7 +108,7 @@
         /// </summary>
         /// <param name="sender">The sender</param>
         /// <param name="e">The event arguments</param>
-        private void ElementOnMouseMove(object sender, MouseEventArgs e)
+        private void OnDragging(object sender, MouseEventArgs e)
         {
             if (!((UIElement)sender).IsMouseCaptured || this.draggable == null)
             {
@@ -157,14 +133,38 @@
         }
 
         /// <summary>
-        /// Gets the mouse coordinates relative to the main application window
+        /// Fires when the left mouse button is pressed
         /// </summary>
-        /// <param name="e">The mouse event args</param>
-        /// <returns>The mouse coordinates</returns>
-        private Point GetMousePositionFromMainWindow(MouseEventArgs e)
+        /// <param name="sender">The sender</param>
+        /// <param name="e">The event arguments</param>
+        private void OnStartDrag(object sender, MouseButtonEventArgs e)
         {
-            Window mainWindow = Application.Current.MainWindow;
-            return e.GetPosition(mainWindow);
+            if (this.draggable == null)
+            {
+                return;
+            }
+
+            // save the mouse position on button down
+            // we only want a diff of the mouse position so we don't care much about which element we use as reference
+            this.mouseStartPosition = this.GetMousePositionFromMainWindow(e);
+            ((UIElement)sender).CaptureMouse();
+        }
+
+        /// <summary>
+        /// Fires when the left mouse button is released
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="e">The event arguments</param>
+        private void OnStopDrag(object sender, MouseButtonEventArgs e)
+        {
+            UIElement element = (UIElement)sender;
+            element.ReleaseMouseCapture();
+
+            // Send a message to the viewmodel that the mouse has been released
+            if (this.draggable != null)
+            {
+                this.DraggableItem.Dropped();
+            }
         }
     }
 }
