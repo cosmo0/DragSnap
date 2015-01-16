@@ -23,7 +23,7 @@
         /// Initializes a new instance of the <see cref="RelayCommand"/> class
         /// </summary>
         /// <param name="execute">The action to execute</param>
-        public RelayCommand(Action<object> execute) : this(execute, null)
+        public RelayCommand(Action<object> execute) : this(execute, DefaultCanExecute)
         {
         }
 
@@ -37,6 +37,11 @@
             if (execute == null)
             {
                 throw new ArgumentNullException("execute");
+            }
+
+            if (canExecute == null)
+            {
+                throw new ArgumentNullException("canExecute");
             }
 
             this.execute = execute;
@@ -66,7 +71,7 @@
         [DebuggerStepThrough]
         public bool CanExecute(object parameter)
         {
-            return this.canExecute == null || this.canExecute(parameter);
+            return this.canExecute != null && this.canExecute(parameter);
         }
 
         /// <summary>
@@ -76,6 +81,16 @@
         public void Execute(object parameter)
         {
             this.execute(parameter);
+        }
+
+        /// <summary>
+        /// Provides a default handler for the "can execute" handler
+        /// </summary>
+        /// <param name="parameter">The action parameter</param>
+        /// <returns>Returns always true</returns>
+        private static bool DefaultCanExecute(object parameter)
+        {
+            return true;
         }
     }
 }
