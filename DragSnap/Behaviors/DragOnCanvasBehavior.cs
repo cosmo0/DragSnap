@@ -13,6 +13,9 @@
     /// </summary>
     public class DragOnCanvasBehavior : Behavior<DependencyObject>
     {
+        /// <summary>
+        /// Registers the DraggableItem dependency property
+        /// </summary>
         public static readonly DependencyProperty DraggableItemProperty =
             DependencyProperty.RegisterAttached(
                 "DraggableItem",
@@ -23,12 +26,24 @@
                     ((DragOnCanvasBehavior)d).draggable = (IDraggable)e.NewValue;
                 })));
 
+        /// <summary>
+        /// Stores the draggable element
+        /// </summary>
         private IDraggable draggable;
 
+        /// <summary>
+        /// Stores the element position
+        /// </summary>
         private Point elementPosition = new Point(0, 0);
 
+        /// <summary>
+        /// Stores the mouse starting position
+        /// </summary>
         private Point mouseStartPosition = new Point(0, 0);
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DragOnCanvasBehavior"/> class
+        /// </summary>
         public DragOnCanvasBehavior()
         {
             this.MouseLeftButtonDownCommand = new RelayCommand((o) =>
@@ -47,6 +62,9 @@
             });
         }
 
+        /// <summary>
+        /// Gets or sets the draggable item
+        /// </summary>
         public IDraggable DraggableItem
         {
             get
@@ -59,12 +77,26 @@
             }
         }
 
+        /// <summary>
+        /// Gets or sets the "left button down" command
+        /// </summary>
         public ICommand MouseLeftButtonDownCommand { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the "left button up" command
+        /// </summary>
         public ICommand MouseLeftButtonUpCommand { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the "mouse move" command
+        /// </summary>
         public ICommand MouseMoveCommand { get; private set; }
 
+        /// <summary>
+        /// Fires when the left mouse button is pressed
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="e">The event arguments</param>
         private void ElementOnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (this.draggable == null)
@@ -78,6 +110,11 @@
             ((UIElement)sender).CaptureMouse();
         }
 
+        /// <summary>
+        /// Fires when the left mouse button is released
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="e">The event arguments</param>
         private void ElementOnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             UIElement element = (UIElement)sender;
@@ -90,6 +127,11 @@
             }
         }
 
+        /// <summary>
+        /// Fires when the mouse is moved over the item
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="e">The event arguments</param>
         private void ElementOnMouseMove(object sender, MouseEventArgs e)
         {
             if (!((UIElement)sender).IsMouseCaptured || this.draggable == null)
