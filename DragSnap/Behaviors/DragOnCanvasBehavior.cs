@@ -48,17 +48,17 @@
         {
             this.StartDrag = new RelayCommand((o) =>
             {
-                ((UIElement)this.AssociatedObject).MouseLeftButtonDown += this.OnStartDrag;
+                this.OnStartDrag();
             });
 
             this.StopDrag = new RelayCommand((o) =>
             {
-                ((UIElement)this.AssociatedObject).MouseLeftButtonUp += this.OnStopDrag;
+                this.OnStopDrag();
             });
 
             this.Dragging = new RelayCommand((o) =>
             {
-                ((UIElement)this.AssociatedObject).MouseMove += this.OnDragging;
+                this.OnDragging();
             });
         }
 
@@ -97,10 +97,10 @@
         /// </summary>
         /// <param name="e">The mouse event args</param>
         /// <returns>The mouse coordinates</returns>
-        private Point GetMousePositionFromMainWindow(MouseEventArgs e)
+        private Point GetMousePositionFromMainWindow()
         {
             Window mainWindow = Application.Current.MainWindow;
-            return e.GetPosition(mainWindow);
+            return Mouse.GetPosition(mainWindow);
         }
 
         /// <summary>
@@ -108,15 +108,15 @@
         /// </summary>
         /// <param name="sender">The sender</param>
         /// <param name="e">The event arguments</param>
-        private void OnDragging(object sender, MouseEventArgs e)
+        private void OnDragging()
         {
-            if (!((UIElement)sender).IsMouseCaptured || this.draggable == null)
+            if (!((UIElement)this.AssociatedObject).IsMouseCaptured || this.draggable == null)
             {
                 return;
             }
 
             // calculate element movement
-            Point mouseNewPos = this.GetMousePositionFromMainWindow(e);
+            Point mouseNewPos = this.GetMousePositionFromMainWindow();
             Vector movement = (mouseNewPos - this.mouseStartPosition);
 
             // make sure the mouse has moved since last time
@@ -137,7 +137,7 @@
         /// </summary>
         /// <param name="sender">The sender</param>
         /// <param name="e">The event arguments</param>
-        private void OnStartDrag(object sender, MouseButtonEventArgs e)
+        private void OnStartDrag()
         {
             if (this.draggable == null)
             {
@@ -146,8 +146,8 @@
 
             // save the mouse position on button down
             // we only want a diff of the mouse position so we don't care much about which element we use as reference
-            this.mouseStartPosition = this.GetMousePositionFromMainWindow(e);
-            ((UIElement)sender).CaptureMouse();
+            this.mouseStartPosition = this.GetMousePositionFromMainWindow();
+            ((UIElement)this.AssociatedObject).CaptureMouse();
         }
 
         /// <summary>
@@ -155,9 +155,9 @@
         /// </summary>
         /// <param name="sender">The sender</param>
         /// <param name="e">The event arguments</param>
-        private void OnStopDrag(object sender, MouseButtonEventArgs e)
+        private void OnStopDrag()
         {
-            UIElement element = (UIElement)sender;
+            UIElement element = (UIElement)this.AssociatedObject;
             element.ReleaseMouseCapture();
 
             // Send a message to the viewmodel that the mouse has been released
