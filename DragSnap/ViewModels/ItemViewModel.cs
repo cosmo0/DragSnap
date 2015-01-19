@@ -126,7 +126,14 @@ namespace DragSnap.ViewModels
                                   .OrderBy(x => x.Index)
                                   .First();
 
-            return (SolidColorBrush)color.Property.GetValue(color, null);
+            if (((SolidColorBrush)color.Property.GetValue(color, null)).Color == Color.FromRgb(0, 0, 0))
+            {
+                return this.RandomColor();
+            }
+            else
+            {
+                return (SolidColorBrush)color.Property.GetValue(color, null);
+            }
         }
     }
 }
