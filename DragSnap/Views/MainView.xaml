@@ -56,7 +56,8 @@
                             x:Name="DraggableBorder"
                             Background="{Binding Path=BackgroundColor}"
                             CornerRadius="3"
-                            Padding="5">
+                            Padding="5"
+                            ClipToBounds="False">
                             <Rectangle>
                                 <Rectangle.Fill>
                                     <VisualBrush
@@ -65,7 +66,8 @@
                             </Rectangle>
 
                             <i:Interaction.Behaviors>
-                                <behaviors:DragOnCanvasBehavior DraggableItem="{Binding}">
+                                <behaviors:DragOnCanvasBehavior
+                                    DraggableItem="{Binding}">
                                     <behaviors:DragOnCanvasBehavior.MouseOverAdornerTemplate>
                                         <DataTemplate>
                                             <Border

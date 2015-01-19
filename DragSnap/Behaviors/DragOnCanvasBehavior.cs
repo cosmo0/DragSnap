@@ -223,7 +223,7 @@
             {
                 AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(this.AssociatedObject as UIElement);
 
-                if (null == adornerLayer)
+                if (adornerLayer == null)
                 {
                     throw new NullReferenceException(string.Format("No adorner found in attached object: {0}", this.AssociatedObject));
                 }
@@ -245,7 +245,7 @@
 
             // Set Data context here because default template assigment is  not setting the context
             var dtContext = (this.AssociatedObject as FrameworkElement).DataContext;
-            if (null == this.mouseOverAdornerControl.DataContext)
+            if (this.mouseOverAdornerControl.DataContext == null)
             {
                 this.mouseOverAdornerControl.DataContext = dtContext;
             }
