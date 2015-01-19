@@ -51,33 +51,48 @@
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border
-                        Background="{Binding Path=BackgroundColor}"
-                        CornerRadius="3"
-                        Padding="5">
-                        <Rectangle>
-                            <Rectangle.Fill>
-                                <VisualBrush
-                                    Visual="{StaticResource appbar_cursor_move}" />
-                            </Rectangle.Fill>
-                        </Rectangle>
+                    <AdornerDecorator>
+                        <Border
+                            Background="{Binding Path=BackgroundColor}"
+                            CornerRadius="3"
+                            Padding="5">
+                            <Rectangle>
+                                <Rectangle.Fill>
+                                    <VisualBrush
+                                        Visual="{StaticResource appbar_cursor_move}" />
+                                </Rectangle.Fill>
+                            </Rectangle>
 
-                        <i:Interaction.Behaviors>
-                            <behaviors:DragOnCanvasBehavior DraggableItem="{Binding}">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
-                                        <i:InvokeCommandAction CommandName="StartDrag" />
-                                    </i:EventTrigger>
-                                    <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
-                                        <i:InvokeCommandAction CommandName="StopDrag" />
-                                    </i:EventTrigger>
-                                    <i:EventTrigger EventName="PreviewMouseMove">
-                                        <i:InvokeCommandAction CommandName="Dragging" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </behaviors:DragOnCanvasBehavior>
-                        </i:Interaction.Behaviors>
-                    </Border>
+                            <i:Interaction.Behaviors>
+                                <behaviors:DragOnCanvasBehavior DraggableItem="{Binding}">
+                                    <behaviors:DragOnCanvasBehavior.MouseOverAdornerTemplate>
+                                        <DataTemplate>
+                                            <TextBlock>Test</TextBlock>
+                                        </DataTemplate>
+                                    </behaviors:DragOnCanvasBehavior.MouseOverAdornerTemplate>
+
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                            <i:InvokeCommandAction CommandName="StartDrag" />
+                                        </i:EventTrigger>
+                                        <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                            <i:InvokeCommandAction CommandName="StopDrag" />
+                                        </i:EventTrigger>
+                                        <i:EventTrigger EventName="PreviewMouseMove">
+                                            <i:InvokeCommandAction CommandName="Dragging" />
+                                        </i:EventTrigger>
+
+                                        <i:EventTrigger EventName="MouseEnter">
+                                            <i:InvokeCommandAction CommandName="ShowMouseOverAdorner" />
+                                        </i:EventTrigger>
+                                        <i:EventTrigger EventName="MouseLeave">
+                                            <i:InvokeCommandAction CommandName="HideMouseOverAdorner" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </behaviors:DragOnCanvasBehavior>
+                            </i:Interaction.Behaviors>
+                        </Border>
+                    </AdornerDecorator>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
