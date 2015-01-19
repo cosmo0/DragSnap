@@ -30,9 +30,12 @@
                     ((DragOnCanvasBehavior)d).draggable = (IDraggable)e.NewValue;
                 })));
 
+        /// <summary>
+        /// Registers the MouseOverAdornerTemplate dependency property
+        /// </summary>
         public static readonly DependencyProperty MouseOverAdornerTemplateProperty =
             DependencyProperty.Register(
-                "AdornerTemplate",
+                "MouseOverAdornerTemplate",
                 typeof(DataTemplate),
                 typeof(DragOnCanvasBehavior),
                 new PropertyMetadata(new PropertyChangedCallback((d, o) =>
@@ -53,10 +56,19 @@
         /// </summary>
         private Point elementPosition = new Point(0, 0);
 
+        /// <summary>
+        /// Stores the mouse over adorner template
+        /// </summary>
         private TemplateAdorner mouseOverAdorner;
 
+        /// <summary>
+        /// Stores the mouse over adorner control (visual representation of the template)
+        /// </summary>
         private ContentControl mouseOverAdornerControl;
 
+        /// <summary>
+        /// Stores a value indicating whether the adorner is shown
+        /// </summary>
         private bool mouseOverAdornerShown = false;
 
         /// <summary>
@@ -115,8 +127,14 @@
         /// </summary>
         public ICommand Dragging { get; private set; }
 
+        /// <summary>
+        /// Gets the "hide mouse over adorner" command
+        /// </summary>
         public ICommand HideMouseOverAdorner { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the mouse over adorner template
+        /// </summary>
         public DataTemplate MouseOverAdornerTemplate
         {
             get
@@ -129,6 +147,9 @@
             }
         }
 
+        /// <summary>
+        /// Gets the "show mouse over adorner" command
+        /// </summary>
         public ICommand ShowMouseOverAdorner { get; private set; }
 
         /// <summary>
@@ -153,10 +174,8 @@
         }
 
         /// <summary>
-        /// Fires when the mouse is moved over the item
+        /// Drags the item with the mouse
         /// </summary>
-        /// <param name="sender">The sender</param>
-        /// <param name="e">The event arguments</param>
         private void OnDragging()
         {
             if (!((UIElement)this.AssociatedObject).IsMouseCaptured || this.draggable == null)
@@ -181,12 +200,18 @@
             }
         }
 
+        /// <summary>
+        /// Hides the mouse-over adorner
+        /// </summary>
         private void OnHideMouseOverAdorner()
         {
             this.mouseOverAdornerControl.Visibility = Visibility.Collapsed;
             this.mouseOverAdornerShown = false;
         }
 
+        /// <summary>
+        /// Shows the mouse-over adorner
+        /// </summary>
         private void OnShowMouseOverAdorner()
         {
             if (this.mouseOverAdornerShown)
@@ -230,10 +255,8 @@
         }
 
         /// <summary>
-        /// Fires when the left mouse button is pressed
+        /// Starts the item drag
         /// </summary>
-        /// <param name="sender">The sender</param>
-        /// <param name="e">The event arguments</param>
         private void OnStartDrag()
         {
             if (this.draggable == null)
@@ -248,10 +271,8 @@
         }
 
         /// <summary>
-        /// Fires when the left mouse button is released
+        /// Stops the item drag
         /// </summary>
-        /// <param name="sender">The sender</param>
-        /// <param name="e">The event arguments</param>
         private void OnStopDrag()
         {
             UIElement element = (UIElement)this.AssociatedObject;
