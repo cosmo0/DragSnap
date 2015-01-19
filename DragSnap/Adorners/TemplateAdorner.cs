@@ -6,11 +6,11 @@
     using System.Windows.Documents;
     using System.Windows.Media;
 
-    public class MouseOverAdorner : Adorner
+    public class TemplateAdorner : Adorner
     {
         private readonly FrameworkElement frameworkElementAdorner;
 
-        public MouseOverAdorner(UIElement adornedElement, FrameworkElement frameworkElementAdorner) : base(adornedElement)
+        public TemplateAdorner(UIElement adornedElement, FrameworkElement frameworkElementAdorner) : base(adornedElement)
         {
             // Assure we get mouse hits
             this.frameworkElementAdorner = frameworkElementAdorner;

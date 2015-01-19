@@ -53,9 +53,11 @@
         /// </summary>
         private Point elementPosition = new Point(0, 0);
 
-        private MouseOverAdorner mouseOverAdorner;
+        private TemplateAdorner mouseOverAdorner;
 
         private ContentControl mouseOverAdornerControl;
+
+        private bool mouseOverAdornerShown = false;
 
         /// <summary>
         /// Stores the mouse starting position
@@ -182,10 +184,16 @@
         private void OnHideMouseOverAdorner()
         {
             this.mouseOverAdornerControl.Visibility = Visibility.Collapsed;
+            this.mouseOverAdornerShown = false;
         }
 
         private void OnShowMouseOverAdorner()
         {
+            if (this.mouseOverAdornerShown)
+            {
+                return;
+            }
+
             if (this.MouseOverAdornerTemplate != null)
             {
                 AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(this.AssociatedObject as UIElement);
@@ -199,7 +207,7 @@
                 this.mouseOverAdornerControl = new ContentControl();
 
                 // Add to adorner
-                adornerLayer.Add(this.mouseOverAdorner = new MouseOverAdorner(this.AssociatedObject as UIElement, this.mouseOverAdornerControl));
+                adornerLayer.Add(this.mouseOverAdorner = new TemplateAdorner(this.AssociatedObject as UIElement, this.mouseOverAdornerControl));
 
                 // set realted bindings
                 this.mouseOverAdornerControl.Content = this.MouseOverAdornerTemplate.LoadContent();
@@ -218,6 +226,7 @@
             }
 
             this.mouseOverAdornerControl.Visibility = Visibility.Visible;
+            this.mouseOverAdornerShown = true;
         }
 
         /// <summary>

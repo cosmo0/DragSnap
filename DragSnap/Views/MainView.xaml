@@ -53,6 +53,7 @@
                 <DataTemplate>
                     <AdornerDecorator>
                         <Border
+                            x:Name="DraggableBorder"
                             Background="{Binding Path=BackgroundColor}"
                             CornerRadius="3"
                             Padding="5">
@@ -67,7 +68,13 @@
                                 <behaviors:DragOnCanvasBehavior DraggableItem="{Binding}">
                                     <behaviors:DragOnCanvasBehavior.MouseOverAdornerTemplate>
                                         <DataTemplate>
-                                            <TextBlock>Test</TextBlock>
+                                            <Border
+                                                DataContext="DraggableBorder"
+                                                BorderBrush="Black"
+                                                BorderThickness="3"
+                                                CornerRadius="3"
+                                                Width="{Binding Path=Width}"
+                                                Height="{Binding Path=Height}"></Border>
                                         </DataTemplate>
                                     </behaviors:DragOnCanvasBehavior.MouseOverAdornerTemplate>
 
