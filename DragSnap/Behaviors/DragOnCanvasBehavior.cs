@@ -116,6 +116,7 @@
             {
                 return (IDraggable)this.GetValue(DraggableItemProperty);
             }
+
             set
             {
                 this.SetValue(DraggableItemProperty, value);
@@ -123,7 +124,7 @@
         }
 
         /// <summary>
-        /// Gets or sets the "mouse move" command
+        /// Gets the "mouse move" command
         /// </summary>
         public ICommand Dragging { get; private set; }
 
@@ -141,6 +142,7 @@
             {
                 return (DataTemplate)this.GetValue(MouseOverAdornerTemplateProperty);
             }
+
             set
             {
                 this.SetValue(MouseOverAdornerTemplateProperty, value);
@@ -153,19 +155,18 @@
         public ICommand ShowMouseOverAdorner { get; private set; }
 
         /// <summary>
-        /// Gets or sets the "left button down" command
+        /// Gets the "left button down" command
         /// </summary>
         public ICommand StartDrag { get; private set; }
 
         /// <summary>
-        /// Gets or sets the "left button up" command
+        /// Gets the "left button up" command
         /// </summary>
         public ICommand StopDrag { get; private set; }
 
         /// <summary>
         /// Gets the mouse coordinates relative to the main application window
         /// </summary>
-        /// <param name="e">The mouse event args</param>
         /// <returns>The mouse coordinates</returns>
         private Point GetMousePositionFromMainWindow()
         {
@@ -185,16 +186,18 @@
 
             // calculate element movement
             Point mouseNewPos = this.GetMousePositionFromMainWindow();
-            Vector movement = (mouseNewPos - this.mouseStartPosition);
+            Vector movement = mouseNewPos - this.mouseStartPosition;
 
             // make sure the mouse has moved since last time
             if (movement.Length > 0)
             {
                 // save current mouse position
                 this.mouseStartPosition = mouseNewPos;
+
                 // move the element
                 Point elementNewPos = this.elementPosition + movement;
                 this.elementPosition = elementNewPos;
+
                 // notify the viewmodel that the element has been moved
                 this.DraggableItem.Moved(elementNewPos.X, elementNewPos.Y);
             }
@@ -244,10 +247,10 @@
             }
 
             // Set Data context here because default template assigment is  not setting the context
-            var dtContext = (this.AssociatedObject as FrameworkElement).DataContext;
+            var dataContext = (this.AssociatedObject as FrameworkElement).DataContext;
             if (this.mouseOverAdornerControl.DataContext == null)
             {
-                this.mouseOverAdornerControl.DataContext = dtContext;
+                this.mouseOverAdornerControl.DataContext = dataContext;
             }
 
             this.mouseOverAdornerControl.Visibility = Visibility.Visible;

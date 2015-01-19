@@ -73,12 +73,12 @@
         /// <summary>
         /// Calculates whether a number is approximately equal to another using the threshold
         /// </summary>
-        /// <param name="A">The first </param>
-        /// <param name="B"></param>
-        /// <returns></returns>
-        private static bool ApproximatelyEquals(double A, double B)
+        /// <param name="x">The first value</param>
+        /// <param name="y">The second value</param>
+        /// <returns>Whether the values are equal within the threshold</returns>
+        private static bool ApproximatelyEquals(double x, double y)
         {
-            double actualDifference = Math.Abs(A - B);
+            double actualDifference = Math.Abs(x - y);
             return actualDifference <= Threshold;
         }
     }

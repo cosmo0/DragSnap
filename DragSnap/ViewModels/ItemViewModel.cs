@@ -91,7 +91,7 @@ namespace DragSnap.ViewModels
         public double Y { get; set; }
 
         /// <summary>
-        /// Gets or sets the item ID (to differenciate between them in the main viewmodel)
+        /// Gets or sets the item ID (to differentiate between them in the main view model)
         /// </summary>
         internal Guid ID { get; set; }
 
@@ -106,6 +106,8 @@ namespace DragSnap.ViewModels
         /// <summary>
         /// Runs when the item is moved
         /// </summary>
+        /// <param name="x">The new X position</param>
+        /// <param name="y">The new Y position</param>
         public void Moved(double x, double y)
         {
             this.X = x;
@@ -116,8 +118,10 @@ namespace DragSnap.ViewModels
         }
 
         /// <summary>
-        /// http://stackoverflow.com/a/11282427/6776
+        /// Generates a random color
+        /// <see href="http://stackoverflow.com/a/11282427/6776" />
         /// </summary>
+        /// <returns>A random color</returns>
         private SolidColorBrush RandomColor()
         {
             var properties = typeof(Brushes).GetProperties();

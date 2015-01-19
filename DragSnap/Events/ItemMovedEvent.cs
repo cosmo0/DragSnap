@@ -14,6 +14,7 @@
         /// <param name="y">The item's Y</param>
         /// <param name="width">The item's width</param>
         /// <param name="height">The item's height</param>
+        /// <param name="id">The item's ID</param>
         public ItemMovedEvent(double x, double y, double width, double height, Guid id)
         {
             this.X = x;

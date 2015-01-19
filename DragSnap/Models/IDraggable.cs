@@ -23,6 +23,8 @@
         /// <summary>
         /// Runs when the item is moved
         /// </summary>
+        /// <param name="x">The new X coordinate</param>
+        /// <param name="y">The new Y coordinate</param>
         void Moved(double x, double y);
     }
 }
