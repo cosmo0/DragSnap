@@ -160,6 +160,9 @@
             }
         }
 
+        /// <summary>
+        /// Instantiates adorner controls and attaches mouse events
+        /// </summary>
         protected override void OnAttached()
         {
             this.InitializeAdorner(this.MouseOverAdornerTemplate, ref this.mouseOverAdornerControl, ref this.mouseOverAdorner, ref this.mouseOverAdornerInitialized);
@@ -177,27 +180,52 @@
             element.PreviewMouseMove += this.element_PreviewMouseMove;
         }
 
+        /// <summary>
+        /// Handles the mouse enter event
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="e">The event</param>
         private void element_MouseEnter(object sender, MouseEventArgs e)
         {
             this.OnShowMouseOverAdorner();
         }
 
+        /// <summary>
+        /// Handles the mouse leave event
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="e">The event</param>
         private void element_MouseLeave(object sender, MouseEventArgs e)
         {
             this.OnHideMouseOverAdorner();
         }
 
+        /// <summary>
+        /// Handles the mouse left button down event
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="e">The event</param>
         private void element_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             this.OnSelectItem();
             this.OnStartDrag();
         }
 
+        /// <summary>
+        /// Handles the mouse left button up event
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="e">The event</param>
         private void element_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             this.OnStopDrag();
         }
 
+        /// <summary>
+        /// Handles the mouse move event
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="e">The event</param>
         private void element_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             this.OnDragging();
@@ -306,8 +334,6 @@
         /// </summary>
         private void OnSelectItem()
         {
-            this.selectedAdornerControl.Visibility = Visibility.Visible;
-
             this.DraggableItem.Select();
         }
 
