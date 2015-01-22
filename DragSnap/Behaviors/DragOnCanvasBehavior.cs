@@ -111,42 +111,6 @@
         /// Whether the selection adorner is initialized
         /// </summary>
         private bool selectedAdornerInitialized;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DragOnCanvasBehavior"/> class
-        /// </summary>
-        public DragOnCanvasBehavior()
-        {
-            this.StartDrag = new RelayCommand((o) =>
-            {
-                this.OnStartDrag();
-            });
-
-            this.StopDrag = new RelayCommand((o) =>
-            {
-                this.OnStopDrag();
-            });
-
-            this.Dragging = new RelayCommand((o) =>
-            {
-                this.OnDragging();
-            });
-
-            this.ShowMouseOverAdorner = new RelayCommand((o) =>
-            {
-                this.OnShowMouseOverAdorner();
-            });
-
-            this.HideMouseOverAdorner = new RelayCommand((o) =>
-            {
-                this.OnHideMouseOverAdorner();
-            });
-
-            this.SelectItem = new RelayCommand((o) =>
-            {
-                this.OnSelectItem();
-            });
-        }
   
         /// <summary>
         /// Gets or sets the draggable item
@@ -163,16 +127,6 @@
                 this.SetValue(DraggableItemProperty, value);
             }
         }
-
-        /// <summary>
-        /// Gets the "mouse move" command
-        /// </summary>
-        public ICommand Dragging { get; private set; }
-
-        /// <summary>
-        /// Gets the "hide mouse over adorner" command
-        /// </summary>
-        public ICommand HideMouseOverAdorner { get; private set; }
 
         /// <summary>
         /// Gets or sets the mouse over adorner template
@@ -206,25 +160,48 @@
             }
         }
 
-        /// <summary>
-        /// Gets the "select item" command
-        /// </summary>
-        public ICommand SelectItem { get; private set; }
+        protected override void OnAttached()
+        {
+            this.InitializeAdorner(this.MouseOverAdornerTemplate, ref this.mouseOverAdornerControl, ref this.mouseOverAdorner, ref this.mouseOverAdornerInitialized);
+            this.InitializeAdorner(this.SelectedAdornerTemplate, ref this.selectedAdornerControl, ref this.selectedAdorner, ref this.selectedAdornerInitialized);
 
-        /// <summary>
-        /// Gets the "show mouse over adorner" command
-        /// </summary>
-        public ICommand ShowMouseOverAdorner { get; private set; }
+            UIElement element = (UIElement)this.AssociatedObject;
 
-        /// <summary>
-        /// Gets the "start drag" command
-        /// </summary>
-        public ICommand StartDrag { get; private set; }
+            // mouse-over events
+            element.MouseEnter += this.element_MouseEnter;
+            element.MouseLeave += this.element_MouseLeave;
 
-        /// <summary>
-        /// Gets the "stop drag" command
-        /// </summary>
-        public ICommand StopDrag { get; private set; }
+            // mouse click events
+            element.PreviewMouseLeftButtonDown += this.element_PreviewMouseLeftButtonDown;
+            element.PreviewMouseLeftButtonUp += this.element_PreviewMouseLeftButtonUp;
+            element.PreviewMouseMove += this.element_PreviewMouseMove;
+        }
+
+        private void element_MouseEnter(object sender, MouseEventArgs e)
+        {
+            this.OnShowMouseOverAdorner();
+        }
+
+        private void element_MouseLeave(object sender, MouseEventArgs e)
+        {
+            this.OnHideMouseOverAdorner();
+        }
+
+        private void element_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.OnSelectItem();
+            this.OnStartDrag();
+        }
+
+        private void element_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            this.OnStopDrag();
+        }
+
+        private void element_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            this.OnDragging();
+        }
 
         /// <summary>
         /// Gets the mouse coordinates relative to the main application window
@@ -281,15 +258,9 @@
                 control.DataContext = dataContext;
             }
 
-            control.Visibility = Visibility.Visible;
+            control.Visibility = Visibility.Collapsed;
 
             initialized = true;
-        }
-
-        private void InitializeAllAdorners()
-        {
-            this.InitializeAdorner(this.MouseOverAdornerTemplate, ref this.mouseOverAdornerControl, ref this.mouseOverAdorner, ref this.mouseOverAdornerInitialized);
-            this.InitializeAdorner(this.SelectedAdornerTemplate, ref this.selectedAdornerControl, ref this.selectedAdorner, ref this.selectedAdornerInitialized);
         }
 
         /// <summary>
@@ -297,8 +268,6 @@
         /// </summary>
         private void OnDragging()
         {
-            this.InitializeAllAdorners();
-
             if (!((UIElement)this.AssociatedObject).IsMouseCaptured || this.draggable == null)
             {
                 return;
@@ -328,8 +297,6 @@
         /// </summary>
         private void OnHideMouseOverAdorner()
         {
-            this.InitializeAllAdorners();
-
             this.mouseOverAdornerControl.Visibility = Visibility.Collapsed;
             this.mouseOverAdornerShown = false;
         }
@@ -339,7 +306,7 @@
         /// </summary>
         private void OnSelectItem()
         {
-            this.InitializeAllAdorners();
+            this.selectedAdornerControl.Visibility = Visibility.Visible;
 
             this.DraggableItem.Select();
         }
@@ -349,8 +316,6 @@
         /// </summary>
         private void OnShowMouseOverAdorner()
         {
-            this.InitializeAllAdorners();
-
             if (this.mouseOverAdornerShown)
             {
                 return;
@@ -365,8 +330,6 @@
         /// </summary>
         private void OnStartDrag()
         {
-            this.InitializeAllAdorners();
-
             if (this.draggable == null)
             {
                 return;
@@ -383,8 +346,6 @@
         /// </summary>
         private void OnStopDrag()
         {
-            this.InitializeAllAdorners();
-
             UIElement element = (UIElement)this.AssociatedObject;
             element.ReleaseMouseCapture();
 

@@ -97,28 +97,6 @@
                                                 Visibility="{Binding Path=Selected, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                         </DataTemplate>
                                     </behaviors:DragOnCanvasBehavior.SelectedAdornerTemplate>
-
-                                    <i:Interaction.Triggers>
-                                        <!-- Dragging events -->
-                                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
-                                            <i:InvokeCommandAction CommandName="StartDrag" />
-                                            <i:InvokeCommandAction CommandName="SelectItem" />
-                                        </i:EventTrigger>
-                                        <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
-                                            <i:InvokeCommandAction CommandName="StopDrag" />
-                                        </i:EventTrigger>
-                                        <i:EventTrigger EventName="PreviewMouseMove">
-                                            <i:InvokeCommandAction CommandName="Dragging" />
-                                        </i:EventTrigger>
-
-                                        <!-- Mouse over events -->
-                                        <i:EventTrigger EventName="MouseEnter">
-                                            <i:InvokeCommandAction CommandName="ShowMouseOverAdorner" />
-                                        </i:EventTrigger>
-                                        <i:EventTrigger EventName="MouseLeave">
-                                            <i:InvokeCommandAction CommandName="HideMouseOverAdorner" />
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
                                 </behaviors:DragOnCanvasBehavior>
                             </i:Interaction.Behaviors>
                         </Border>
