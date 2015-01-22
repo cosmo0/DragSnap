@@ -26,5 +26,10 @@
         /// <param name="x">The new X coordinate</param>
         /// <param name="y">The new Y coordinate</param>
         void Moved(double x, double y);
+
+        /// <summary>
+        /// Selects the current item
+        /// </summary>
+        void Select();
     }
 }

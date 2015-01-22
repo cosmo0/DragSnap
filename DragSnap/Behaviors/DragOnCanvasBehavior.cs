@@ -47,6 +47,22 @@
                 })));
 
         /// <summary>
+        /// Registers the selection adorner dependency property
+        /// </summary>
+        public static readonly DependencyProperty SelectedAdornerTemplateProperty =
+            DependencyProperty.Register(
+                "SelectedAdornerTemplate",
+                typeof(DataTemplate),
+                typeof(DragOnCanvasBehavior),
+                new PropertyMetadata(new PropertyChangedCallback((d, o) =>
+                {
+                    if (null != ((DragOnCanvasBehavior)d).selectedAdornerControl)
+                    {
+                        ((DragOnCanvasBehavior)d).selectedAdornerControl.ContentTemplate = (DataTemplate)o.NewValue;
+                    }
+                })));
+
+        /// <summary>
         /// Stores the draggable element
         /// </summary>
         private IDraggable draggable;
@@ -67,6 +83,11 @@
         private ContentControl mouseOverAdornerControl;
 
         /// <summary>
+        /// Whether the mouse over adorner is initialized
+        /// </summary>
+        private bool mouseOverAdornerInitialized = false;
+
+        /// <summary>
         /// Stores a value indicating whether the adorner is shown
         /// </summary>
         private bool mouseOverAdornerShown = false;
@@ -75,6 +96,21 @@
         /// Stores the mouse starting position
         /// </summary>
         private Point mouseStartPosition = new Point(0, 0);
+
+        /// <summary>
+        /// The selected adorner template
+        /// </summary>
+        private TemplateAdorner selectedAdorner;
+
+        /// <summary>
+        /// The selected adorner control
+        /// </summary>
+        private ContentControl selectedAdornerControl;
+
+        /// <summary>
+        /// Whether the selection adorner is initialized
+        /// </summary>
+        private bool selectedAdornerInitialized;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DragOnCanvasBehavior"/> class
@@ -105,8 +141,13 @@
             {
                 this.OnHideMouseOverAdorner();
             });
-        }
 
+            this.SelectItem = new RelayCommand((o) =>
+            {
+                this.OnSelectItem();
+            });
+        }
+  
         /// <summary>
         /// Gets or sets the draggable item
         /// </summary>
@@ -150,17 +191,38 @@
         }
 
         /// <summary>
+        /// Gets or sets the selected adorner template
+        /// </summary>
+        public DataTemplate SelectedAdornerTemplate
+        {
+            get
+            {
+                return (DataTemplate)this.GetValue(SelectedAdornerTemplateProperty);
+            }
+
+            set
+            {
+                this.SetValue(SelectedAdornerTemplateProperty, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets the "select item" command
+        /// </summary>
+        public ICommand SelectItem { get; private set; }
+
+        /// <summary>
         /// Gets the "show mouse over adorner" command
         /// </summary>
         public ICommand ShowMouseOverAdorner { get; private set; }
 
         /// <summary>
-        /// Gets the "left button down" command
+        /// Gets the "start drag" command
         /// </summary>
         public ICommand StartDrag { get; private set; }
 
         /// <summary>
-        /// Gets the "left button up" command
+        /// Gets the "stop drag" command
         /// </summary>
         public ICommand StopDrag { get; private set; }
 
@@ -175,10 +237,68 @@
         }
 
         /// <summary>
+        /// Initializes an adorner
+        /// </summary>
+        /// <param name="template">The adorner data template</param>
+        /// <param name="control">The adorner control</param>
+        /// <param name="adorner">The adorner</param>
+        /// <param name="initialized">Whether the adorner has been initialized</param>
+        private void InitializeAdorner(DataTemplate template, ref ContentControl control, ref TemplateAdorner adorner, ref bool initialized)
+        {
+            if (initialized)
+            {
+                return;
+            }
+
+            if (template != null)
+            {
+                AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(this.AssociatedObject as UIElement);
+
+                if (adornerLayer == null)
+                {
+                    throw new NullReferenceException(string.Format("No adorner found in attached object: {0}", this.AssociatedObject));
+                }
+
+                // Create adorner
+                control = new ContentControl();
+
+                // Add to adorner
+                adornerLayer.Add(adorner = new TemplateAdorner(this.AssociatedObject as UIElement, control));
+
+                // set realted bindings
+                control.Content = template.LoadContent();
+
+                // Bind internal dependency to external 
+                Binding bindingMargin = new Binding("AdornerMargin");
+                bindingMargin.Source = this;
+                BindingOperations.SetBinding(adorner, ContentControl.MarginProperty, bindingMargin);
+            }
+
+            // Set Data context here because default template assigment is  not setting the context
+            var dataContext = (this.AssociatedObject as FrameworkElement).DataContext;
+            if (control.DataContext == null)
+            {
+                control.DataContext = dataContext;
+            }
+
+            control.Visibility = Visibility.Visible;
+
+            initialized = true;
+        }
+
+        private void InitializeAllAdorners()
+        {
+            this.InitializeAdorner(this.MouseOverAdornerTemplate, ref this.mouseOverAdornerControl, ref this.mouseOverAdorner, ref this.mouseOverAdornerInitialized);
+            this.InitializeAdorner(this.SelectedAdornerTemplate, ref this.selectedAdornerControl, ref this.selectedAdorner, ref this.selectedAdornerInitialized);
+        }
+
+        /// <summary>
         /// Drags the item with the mouse
         /// </summary>
         private void OnDragging()
         {
+            this.InitializeAllAdorners();
+
             if (!((UIElement)this.AssociatedObject).IsMouseCaptured || this.draggable == null)
             {
                 return;
@@ -208,8 +328,20 @@
         /// </summary>
         private void OnHideMouseOverAdorner()
         {
+            this.InitializeAllAdorners();
+
             this.mouseOverAdornerControl.Visibility = Visibility.Collapsed;
             this.mouseOverAdornerShown = false;
+        }
+
+        /// <summary>
+        /// Selects the current item
+        /// </summary>
+        private void OnSelectItem()
+        {
+            this.InitializeAllAdorners();
+
+            this.DraggableItem.Select();
         }
 
         /// <summary>
@@ -217,40 +349,11 @@
         /// </summary>
         private void OnShowMouseOverAdorner()
         {
+            this.InitializeAllAdorners();
+
             if (this.mouseOverAdornerShown)
             {
                 return;
-            }
-
-            if (this.MouseOverAdornerTemplate != null)
-            {
-                AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(this.AssociatedObject as UIElement);
-
-                if (adornerLayer == null)
-                {
-                    throw new NullReferenceException(string.Format("No adorner found in attached object: {0}", this.AssociatedObject));
-                }
-
-                // Create adorner
-                this.mouseOverAdornerControl = new ContentControl();
-
-                // Add to adorner
-                adornerLayer.Add(this.mouseOverAdorner = new TemplateAdorner(this.AssociatedObject as UIElement, this.mouseOverAdornerControl));
-
-                // set realted bindings
-                this.mouseOverAdornerControl.Content = this.MouseOverAdornerTemplate.LoadContent();
-
-                // Bind internal dependency to external 
-                Binding bindingMargin = new Binding("AdornerMargin");
-                bindingMargin.Source = this;
-                BindingOperations.SetBinding(this.mouseOverAdorner, ContentControl.MarginProperty, bindingMargin);
-            }
-
-            // Set Data context here because default template assigment is  not setting the context
-            var dataContext = (this.AssociatedObject as FrameworkElement).DataContext;
-            if (this.mouseOverAdornerControl.DataContext == null)
-            {
-                this.mouseOverAdornerControl.DataContext = dataContext;
             }
 
             this.mouseOverAdornerControl.Visibility = Visibility.Visible;
@@ -262,6 +365,8 @@
         /// </summary>
         private void OnStartDrag()
         {
+            this.InitializeAllAdorners();
+
             if (this.draggable == null)
             {
                 return;
@@ -278,6 +383,8 @@
         /// </summary>
         private void OnStopDrag()
         {
+            this.InitializeAllAdorners();
+
             UIElement element = (UIElement)this.AssociatedObject;
             element.ReleaseMouseCapture();
 

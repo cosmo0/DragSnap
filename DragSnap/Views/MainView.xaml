@@ -6,9 +6,15 @@
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:behaviors="clr-namespace:DragSnap.Behaviors"
+             xmlns:converters="clr-namespace:DragSnap.Converters"
              mc:Ignorable="d"
              d:DesignHeight="300"
              d:DesignWidth="300">
+
+    <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
@@ -72,17 +78,31 @@
                                         <DataTemplate>
                                             <Border
                                                 DataContext="DraggableBorder"
-                                                BorderBrush="Black"
+                                                BorderBrush="#B0000000"
                                                 BorderThickness="3"
                                                 CornerRadius="3"
                                                 Width="{Binding Path=Width}"
-                                                Height="{Binding Path=Height}"></Border>
+                                                Height="{Binding Path=Height}" />
                                         </DataTemplate>
                                     </behaviors:DragOnCanvasBehavior.MouseOverAdornerTemplate>
+                                    <behaviors:DragOnCanvasBehavior.SelectedAdornerTemplate>
+                                        <DataTemplate>
+                                            <Border
+                                                DataContext="DraggableBorder"
+                                                BorderBrush="#FF34619E"
+                                                BorderThickness="3"
+                                                CornerRadius="3"
+                                                Width="{Binding Path=Width}"
+                                                Height="{Binding Path=Height}"
+                                                Visibility="{Binding Path=Selected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        </DataTemplate>
+                                    </behaviors:DragOnCanvasBehavior.SelectedAdornerTemplate>
 
                                     <i:Interaction.Triggers>
+                                        <!-- Dragging events -->
                                         <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
                                             <i:InvokeCommandAction CommandName="StartDrag" />
+                                            <i:InvokeCommandAction CommandName="SelectItem" />
                                         </i:EventTrigger>
                                         <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
                                             <i:InvokeCommandAction CommandName="StopDrag" />
@@ -91,6 +111,7 @@
                                             <i:InvokeCommandAction CommandName="Dragging" />
                                         </i:EventTrigger>
 
+                                        <!-- Mouse over events -->
                                         <i:EventTrigger EventName="MouseEnter">
                                             <i:InvokeCommandAction CommandName="ShowMouseOverAdorner" />
                                         </i:EventTrigger>

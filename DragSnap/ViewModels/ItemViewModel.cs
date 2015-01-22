@@ -40,6 +40,8 @@ namespace DragSnap.ViewModels
             this.X = 0;
             this.Y = 0;
 
+            this.Selected = false;
+
             this.ID = Guid.NewGuid();
         }
 
@@ -76,6 +78,11 @@ namespace DragSnap.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the item is currently selected
+        /// </summary>
+        public bool Selected { get; set; }
+
+        /// <summary>
         /// Gets or sets the item width
         /// </summary>
         public int Width { get; set; }
@@ -91,7 +98,7 @@ namespace DragSnap.ViewModels
         public double Y { get; set; }
 
         /// <summary>
-        /// Gets or sets the item ID (to differentiate between them in the main view model)
+        /// Gets or sets the item ID (to differentiate between items in the main view model)
         /// </summary>
         internal Guid ID { get; set; }
 
@@ -115,6 +122,16 @@ namespace DragSnap.ViewModels
 
             // Notify the container that the item is moved, so that it can calculate snapping
             this.events.PublishOnUIThread(new ItemMovedEvent(this.X, this.Y, this.Width, this.Height, this.ID));
+        }
+
+        /// <summary>
+        /// Marks the current item as selected
+        /// </summary>
+        public void Select()
+        {
+            this.Selected = true;
+
+            this.events.PublishOnUIThread(new ItemSelectedEvent(this.ID));
         }
 
         /// <summary>

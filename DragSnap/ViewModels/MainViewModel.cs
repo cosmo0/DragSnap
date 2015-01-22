@@ -9,7 +9,7 @@
     /// Main view model for the application
     /// </summary>
     [ImplementPropertyChanged]
-    public class MainViewModel : PropertyChangedBase, IHandle<ItemMovedEvent>
+    public class MainViewModel : PropertyChangedBase, IHandle<ItemMovedEvent>, IHandle<ItemSelectedEvent>
     {
         /// <summary>
         /// The threshold at which the items positions are considered equal
@@ -44,6 +44,23 @@
         public void AddItem()
         {
             this.Items.Add(new ItemViewModel(this.events));
+        }
+
+        /// <summary>
+        /// Handles the item selected event
+        /// </summary>
+        /// <param name="message">The message</param>
+        public void Handle(ItemSelectedEvent message)
+        {
+            foreach (ItemViewModel item in this.Items)
+            {
+                if (item.ID == message.ID)
+                {
+                    continue;
+                }
+
+                item.Selected = false;
+            }
         }
 
         /// <summary>

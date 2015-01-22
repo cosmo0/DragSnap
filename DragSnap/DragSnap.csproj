@@ -94,7 +94,9 @@
     </Compile>
     <Compile Include="Behaviors\DragOnCanvasBehavior.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Events\ItemMovedEvent.cs" />
+    <Compile Include="Events\ItemSelectedEvent.cs" />
     <Compile Include="Models\IDraggable.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
@@ -178,9 +180,7 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Converters\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\WindowsIcons-license.txt" />
   </ItemGroup>
