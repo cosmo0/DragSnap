@@ -77,7 +77,7 @@
                                     <behaviors:DragOnCanvasBehavior.MouseOverAdornerTemplate>
                                         <DataTemplate>
                                             <Border
-                                                DataContext="DraggableBorder"
+                                                DataContext="{Binding DataContext, ElementName=DraggableBorder}"
                                                 BorderBrush="#B0000000"
                                                 BorderThickness="3"
                                                 CornerRadius="3"
@@ -88,7 +88,7 @@
                                     <behaviors:DragOnCanvasBehavior.SelectedAdornerTemplate>
                                         <DataTemplate>
                                             <Border
-                                                DataContext="DraggableBorder"
+                                                DataContext="{Binding DataContext, ElementName=DraggableBorder}"
                                                 BorderBrush="#FF34619E"
                                                 BorderThickness="3"
                                                 CornerRadius="3"
