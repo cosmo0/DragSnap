@@ -111,7 +111,7 @@
         /// Whether the selection adorner is initialized
         /// </summary>
         private bool selectedAdornerInitialized;
-  
+
         /// <summary>
         /// Gets or sets the draggable item
         /// </summary>
@@ -250,34 +250,31 @@
         /// <param name="initialized">Whether the adorner has been initialized</param>
         private void InitializeAdorner(DataTemplate template, ref ContentControl control, ref TemplateAdorner adorner, ref bool initialized)
         {
-            if (initialized)
+            if (initialized || template == null)
             {
                 return;
             }
 
-            if (template != null)
+            AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(this.AssociatedObject as UIElement);
+
+            if (adornerLayer == null)
             {
-                AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(this.AssociatedObject as UIElement);
-
-                if (adornerLayer == null)
-                {
-                    throw new NullReferenceException(string.Format("No adorner found in attached object: {0}", this.AssociatedObject));
-                }
-
-                // Create adorner
-                control = new ContentControl();
-
-                // Add to adorner
-                adornerLayer.Add(adorner = new TemplateAdorner(this.AssociatedObject as UIElement, control));
-
-                // set realted bindings
-                control.Content = template.LoadContent();
-
-                // Bind internal dependency to external 
-                Binding bindingMargin = new Binding("AdornerMargin");
-                bindingMargin.Source = this;
-                BindingOperations.SetBinding(adorner, ContentControl.MarginProperty, bindingMargin);
+                throw new NullReferenceException(string.Format("No adorner found in attached object: {0}", this.AssociatedObject));
             }
+
+            // Create adorner
+            control = new ContentControl();
+
+            // Add to adorner
+            adornerLayer.Add(adorner = new TemplateAdorner(this.AssociatedObject as UIElement, control));
+
+            // set realted bindings
+            control.Content = template.LoadContent();
+
+            // Bind internal dependency to external 
+            Binding bindingMargin = new Binding("AdornerMargin");
+            bindingMargin.Source = this;
+            BindingOperations.SetBinding(adorner, ContentControl.MarginProperty, bindingMargin);
 
             // Set Data context here because default template assigment is  not setting the context
             var dataContext = (this.AssociatedObject as FrameworkElement).DataContext;
@@ -325,6 +322,11 @@
         /// </summary>
         private void OnHideMouseOverAdorner()
         {
+            if (this.MouseOverAdornerTemplate == null)
+            {
+                return;
+            }
+
             this.mouseOverAdornerControl.Visibility = Visibility.Collapsed;
             this.mouseOverAdornerShown = false;
         }
@@ -342,7 +344,7 @@
         /// </summary>
         private void OnShowMouseOverAdorner()
         {
-            if (this.mouseOverAdornerShown)
+            if (this.mouseOverAdornerShown || this.MouseOverAdornerTemplate == null)
             {
                 return;
             }
