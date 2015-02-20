@@ -64,12 +64,8 @@
                             CornerRadius="3"
                             Padding="5"
                             ClipToBounds="False">
-                            <Rectangle>
-                                <Rectangle.Fill>
-                                    <VisualBrush
-                                        Visual="{StaticResource appbar_cursor_move}" />
-                                </Rectangle.Fill>
-                            </Rectangle>
+                            <Image
+                                Source="/DragSnap;component/Resources/Images/default.png" />
 
                             <i:Interaction.Behaviors>
                                 <behaviors:DragOnCanvasBehavior
@@ -94,7 +90,7 @@
                                                 CornerRadius="3"
                                                 Width="{Binding Path=Width}"
                                                 Height="{Binding Path=Height}"
-                                                Visibility="{Binding Path=Selected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                                Visibility="{Binding Path=Selected, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                         </DataTemplate>
                                     </behaviors:DragOnCanvasBehavior.SelectedAdornerTemplate>
                                 </behaviors:DragOnCanvasBehavior>
